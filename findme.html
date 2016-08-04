@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Get My Exact Location</title>
+  <style>
+    body {
+      margin-left: 0;
+      margin-right: 0;
+      text-align: center;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+  <script>
+    function getMyLocation(){
+      if(navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(locationSuccess,locationFail);
+      }
+      else {
+         $("#result").html("This browser doesn't support geolocation.");
+      }
+    }
+    function locationSuccess(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      
+      geocoder = new google.maps.Geocoder;
+      var latlng = new google.maps.LatLng(latitude, longitude);
+      
+      geocoder.geocode({'location' : latlng}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          $("#result").html(results[0].formatted_address);
+        }
+      })
+    }
+
+    function locationFail() {
+      alert("Oops, could not find you.");
+    }
+  </script>
+</head>
+<body>
+    <input type="button" value="Get My Exact Location" onclick="getMyLocation()">
+    <div id="result"></div>
+</body>
+</html>
